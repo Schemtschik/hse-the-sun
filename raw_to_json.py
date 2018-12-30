@@ -15,8 +15,8 @@ def formatDate(year, month, day, time):
     t = t if t < 24 else 0
     return year + '-' + correct_len(month) + '-' + correct_len(day) + ' ' + correct_len(str(t)) + ':00:00'
 
-input_file = open("data/rgofull.txt", "r")
-output_file = open("data/rgofull.json", "w")
+input_file = open("data/rgousfull.txt", "r")
+output_file = open("data/rgousfull.json", "w")
 
 for line in input_file.readlines():
     if len(line) < 74: continue
