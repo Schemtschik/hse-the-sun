@@ -25,9 +25,16 @@ for line in input_file.readlines():
     record = common.Record()
 
     record.group_id = line[12:20]
+
+    try:
+        record.group_id = int(record.group_id)
+    except:
+        continue
+
     record.latitude = float(line[63:68])
     record.longtitude = float(line[57:62])
     record.time = formatDate(line[:4], line[4:6], line[6:8], line[9:12])
+    record.area = int(line[40:44])
 
     output_file.write(json.dumps(record.__dict__) + '\n')
 
