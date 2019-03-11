@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 import common
 
-input_file = open("data/rgousfull.filtered.json", "r")
+input_file = open("data/rgousfull.hsc.json", "r")
 records = []
 for line in input_file.readlines():
     records.append(common.Record())
