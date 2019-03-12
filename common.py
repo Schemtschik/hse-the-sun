@@ -5,6 +5,8 @@ class Record:
         self.longtitude = 0.0
         self.latitude = 0.0
         self.area = 0
+        self.old = False
+        self.previous_id = 0
 
 
 class Sunspot:
@@ -13,8 +15,6 @@ class Sunspot:
         self.records = []
         self.area = 0
         self.filtered = False
-        self.previousId = 0
-
 
 def getSunspotsFromRecords(records):
     sunspotById = dict()
