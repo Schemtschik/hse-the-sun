@@ -63,8 +63,9 @@ def mark_and_get_accuracy(long_interval, lat_interval):
 
     return success_count / len(long_live_sunspots)
 
-for long_interval in [12, 13, 14, 15, 16, 17]:
-    for lat_interval in [8, 9, 10, 11, 12, 13]:
-        value = mark_and_get_accuracy(long_interval, lat_interval)
-        if value >= 0.85:
-            print("(%1f, %1f) = %0.5f" % (long_interval, lat_interval, mark_and_get_accuracy(long_interval, lat_interval)))
+for i in range(21):
+    t = 1 + (i - 10) / 10
+    long_interval = t * 15
+    lat_interval = t * 8
+    value = mark_and_get_accuracy(long_interval, lat_interval)
+    print("(%1f, %1f) = %0.5f" % (long_interval, lat_interval, mark_and_get_accuracy(long_interval, lat_interval)))

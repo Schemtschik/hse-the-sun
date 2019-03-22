@@ -15,6 +15,7 @@ class Sunspot:
         self.records = []
         self.area = 0
         self.filtered = False
+        self.old = False
 
 def getSunspotsFromRecords(records):
     sunspotById = dict()
@@ -26,5 +27,8 @@ def getSunspotsFromRecords(records):
         sunspotById[record.group_id].records.append(record)
 
         sunspotById[record.group_id].area = max(x.area for x in sunspotById[record.group_id].records)
+
+        if (record.old):
+            sunspotById[record.group_id].old = True
 
     return list(sunspotById.values())

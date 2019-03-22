@@ -11,12 +11,12 @@ AREA_LIMIT = 3600
 
 
 def getFrame(arr, angle_limit, area_limit):
-    return [x for x in arr if not x.filtered and
+    return [x for x in arr if not x.filtered and not x.old and
             (abs(x.records[0].longtitude) >= angle_limit - ANGLE_STEP) and (abs(x.records[0].longtitude) < angle_limit) and
             (x.area >= area_limit - AREA_STEP) and (x.area < area_limit)]
 
 
-input_file = open("data/rgousfull.hsc.json", "r")
+input_file = open("data/rgousfull.marked.json", "r")
 output_file = open("data/rgousfull.filtered.json", "w")
 
 lines = input_file.readlines()
