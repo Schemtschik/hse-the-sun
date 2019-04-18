@@ -2,13 +2,14 @@
 
 import bisect
 import json
+import math
 import time
 
 from datetime import datetime
 
 import common
 
-PERIOD_IN_DAYS = 8
+PERIOD_IN_DAYS = 11
 PERIOD_IN_SECONDS = PERIOD_IN_DAYS * 24 * 60 * 60
 TIME_INTERVAL = 60 * 60 * 12 # 12h
 
@@ -44,12 +45,20 @@ def mark_and_get_accuracy(long_interval, lat_interval):
         return long_diff < long_interval and lat_diff < lat_interval and \
                (long_diff / long_interval)**2 + (lat_diff / lat_interval)**2 <= 1
 
+    def get_score(first_record, second_record):
+        r = math.sqrt(second_record.area) / 2
+        lat_l = max(second_record.latitude - r, first_record.latitude - lat_interval)
+        lat_r = min(second_record.latitude + r, first_record.latitude + lat_interval)
+        long_l = max(second_record.longtitude - r, get_longtitude_after_period(first_record.longtitude) - long_interval)
+        long_r = min(second_record.longtitude + r, get_longtitude_after_period(first_record.longtitude) + long_interval)
+        return max(0, (lat_r - lat_l)) * max(0, (long_r - long_l))
+
     for record in records:
         record.marked = False
 
     long_live_sunspots = [sunspot for sunspot in sunspots if sunspot.records[-1].time - sunspot.records[0].time >= PERIOD_IN_SECONDS]
 
-    success_count = 0
+    score = 0
     for spot in long_live_sunspots:
         record = spot.records[0]
         left = bisect.bisect_left(times, record.time + PERIOD_IN_SECONDS - TIME_INTERVAL)
@@ -57,15 +66,18 @@ def mark_and_get_accuracy(long_interval, lat_interval):
         for record2 in records[left:right]:
             if not record2.marked and is_same(record, record2):
                 record2.marked = True
-                if record.group_id == record2.group_id:
-                    success_count += 1
+                score += get_score(record, record2)
                 break
 
-    return success_count / len(long_live_sunspots)
+    return score / (lat_interval * long_interval)
 
-for i in range(21):
+temp = []
+for i in range(1, 21):
     t = 1 + (i - 10) / 10
     long_interval = t * 15
     lat_interval = t * 8
-    value = mark_and_get_accuracy(long_interval, lat_interval)
-    print("(%1f, %1f) = %0.5f" % (long_interval, lat_interval, mark_and_get_accuracy(long_interval, lat_interval)))
+    temp.append(mark_and_get_accuracy(long_interval, lat_interval))
+
+import matplotlib.pyplot as plt
+plt.plot(temp)
+plt.show()
