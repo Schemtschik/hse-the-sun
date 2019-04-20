@@ -12,6 +12,7 @@ for line in input_file.readlines():
     records[-1].__dict__.update(json.loads(line))
 
 sunspots = common.getSunspotsFromRecords(records)
+sunspots = [x for x in sunspots if not x.old]
 sunspots_count = len(sunspots)
 sunspots.sort(key=lambda spot: spot.area)
 

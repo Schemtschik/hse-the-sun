@@ -9,7 +9,7 @@ from datetime import datetime
 
 import common
 
-PERIOD_IN_DAYS = 11
+PERIOD_IN_DAYS = 10
 PERIOD_IN_SECONDS = PERIOD_IN_DAYS * 24 * 60 * 60
 TIME_INTERVAL = 60 * 60 * 12 # 12h
 
@@ -59,6 +59,7 @@ def mark_and_get_accuracy(long_interval, lat_interval):
     long_live_sunspots = [sunspot for sunspot in sunspots if sunspot.records[-1].time - sunspot.records[0].time >= PERIOD_IN_SECONDS]
 
     score = 0
+    count = 0
     for spot in long_live_sunspots:
         record = spot.records[0]
         left = bisect.bisect_left(times, record.time + PERIOD_IN_SECONDS - TIME_INTERVAL)
@@ -67,6 +68,7 @@ def mark_and_get_accuracy(long_interval, lat_interval):
             if not record2.marked and is_same(record, record2):
                 record2.marked = True
                 score += get_score(record, record2)
+                count += 1
                 break
 
     return score / (lat_interval * long_interval)
