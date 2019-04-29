@@ -9,6 +9,9 @@ from datetime import datetime
 
 import common
 
+import matplotlib.pyplot as plt
+
+
 PERIOD_IN_DAYS = 10
 PERIOD_IN_SECONDS = PERIOD_IN_DAYS * 24 * 60 * 60
 TIME_INTERVAL = 60 * 60 * 12 # 12h
@@ -73,13 +76,20 @@ def mark_and_get_accuracy(long_interval, lat_interval):
 
     return score / (lat_interval * long_interval)
 
-temp = []
-for i in range(1, 21):
-    t = 1 + (i - 10) / 10
-    long_interval = t * 15
-    lat_interval = t * 8
-    temp.append(mark_and_get_accuracy(long_interval, lat_interval))
 
-import matplotlib.pyplot as plt
-plt.plot(temp)
+for j in range(7, 14):
+    PERIOD_IN_DAYS = j
+    PERIOD_IN_SECONDS = PERIOD_IN_DAYS * 24 * 60 * 60
+    temp = []
+    for i in range(1, 21):
+        t = 1 + (i - 10) / 10
+        long_interval = t * 15
+        lat_interval = t * 8
+        temp.append(mark_and_get_accuracy(long_interval, lat_interval))
+    plt.plot(temp, label=str(j) + ' days')
+    plt.legend()
+plt.xlabel('ellipse linear size coefficient')
+plt.ylabel('accuracy score')
+plt.xticks([i for i in range(18)])
+plt.grid()
 plt.show()
