@@ -8,8 +8,8 @@ from datetime import datetime
 
 import common
 
-LONG_INTERVAL = 15
-LAT_INTERVAL = 8
+LONG_INTERVAL = 8
+LAT_INTERVAL = 5
 PERIOD_IN_DAYS = 15
 PERIOD_IN_SECONDS = PERIOD_IN_DAYS * 24 * 60 * 60
 TIME_INTERVAL = 60 * 60 * 12 # 12h
@@ -46,7 +46,7 @@ def is_same(first_record, second_record):
     return long_diff < LONG_INTERVAL and lat_diff < LAT_INTERVAL and \
            (long_diff / LONG_INTERVAL)**2 + (lat_diff / LAT_INTERVAL)**2 <= 1
 
-spots_to_check = [sunspot for sunspot in sunspots if sunspot.records[-1].longtitude <= (90 - 180 / 14)]
+spots_to_check = [sunspot for sunspot in sunspots if sunspot.records[-1].longtitude >= (90 - 180 / 14) and sunspot.area >= 250]
 
 for spot in spots_to_check:
     record = spot.records[-1]
@@ -54,6 +54,7 @@ for spot in spots_to_check:
     right = bisect.bisect_left(times, record.time + PERIOD_IN_SECONDS + TIME_INTERVAL)
     for record2 in records[left:right]:
         if not record2.old and is_same(record, record2):
+            print(record.group_id, ' ', record2.group_id)
             record2.old = True
             record2.previous_id = record.group_id
             break

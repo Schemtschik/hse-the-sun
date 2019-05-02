@@ -16,6 +16,7 @@ class Sunspot:
         self.area = 0
         self.filtered = False
         self.old = False
+        self.previous_id = 0
 
 def getSunspotsFromRecords(records):
     sunspotById = dict()
@@ -30,5 +31,6 @@ def getSunspotsFromRecords(records):
 
         if (record.old):
             sunspotById[record.group_id].old = True
+            sunspotById[record.group_id].previous_id = record.previous_id
 
     return list(sunspotById.values())
