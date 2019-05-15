@@ -19,8 +19,8 @@ def get_longtitude_after_period(long):
     return long + 180 * PERIOD_IN_DAYS / 14 - 360
 
 
-input_file = open("data/rgousfull.hsc.json", "r")
-output_file = open("data/rgousfull.marked.json", "w")
+input_file = open("data/rgofull.hsc.json", "r")
+output_file = open("data/rgofull.marked.json", "w")
 
 lines = input_file.readlines()
 records = []
@@ -33,7 +33,10 @@ def timestamp_from_date(date_s):
 for i in range(len(lines)):
     record = common.Record()
     record.__dict__.update(json.loads(lines[i]))
-    record.time = timestamp_from_date(record.time)
+    try:
+        record.time = timestamp_from_date(record.time)
+    except:
+        continue
     records.append(record)
 
 records.sort(key=lambda record: record.time)
@@ -46,7 +49,7 @@ def is_same(first_record, second_record):
     return long_diff < LONG_INTERVAL and lat_diff < LAT_INTERVAL and \
            (long_diff / LONG_INTERVAL)**2 + (lat_diff / LAT_INTERVAL)**2 <= 1
 
-spots_to_check = [sunspot for sunspot in sunspots if sunspot.records[-1].longtitude >= (90 - 180 / 14) and sunspot.area >= 250]
+spots_to_check = [sunspot for sunspot in sunspots if sunspot.records[-1].longtitude >= (90 - 180 / 14) and sunspot.area >= 500]
 
 for spot in spots_to_check:
     record = spot.records[-1]

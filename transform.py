@@ -8,8 +8,8 @@ from sunpy.coordinates import frames
 import common
 
 
-input_file = open("data/rgousfull.json", "r")
-output_file = open("data/rgousfull.hsc.json", "w")
+input_file = open("data/rgofull.json", "r")
+output_file = open("data/rgofull.hsc.json", "w")
 
 lines = input_file.readlines()
 
